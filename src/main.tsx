@@ -41,7 +41,7 @@ function Navbar(){
 }
 function CoverImage({project}:{project:Project}){
  const crop=project.coverCrop||{x:50,y:50,zoom:1};
- return <img src={project.image} onError={e=>{if(project.fallback&&e.currentTarget.src!==project.fallback)e.currentTarget.src=project.fallback}} style={{objectPosition:crop.x+'% '+crop.y+'%',transformOrigin:crop.x+'% '+crop.y+'%',transform:'scale('+crop.zoom+')'}} className="w-full h-full object-cover pointer-events-none block" draggable={false} alt={project.title}/>;
+ return <img decoding="async" src={project.image} onError={e=>{if(project.fallback&&e.currentTarget.src!==project.fallback)e.currentTarget.src=project.fallback}} style={{objectPosition:crop.x+'% '+crop.y+'%',transformOrigin:crop.x+'% '+crop.y+'%',transform:'scale('+crop.zoom+')'}} className="w-full h-full object-cover pointer-events-none block" draggable={false} alt={project.title}/>;
 }
 function ImageMarquee({projects}:{projects:Project[]}){
  const captions=useRef<HTMLDivElement>(null);const captionActive=useRef(false);

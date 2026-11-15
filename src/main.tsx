@@ -111,6 +111,11 @@ function database():Promise<IDBDatabase>{return new Promise((resolve,reject)=>{c
 async function readData(){const db=await database();return new Promise<SiteData|undefined>((resolve,reject)=>{const tx=db.transaction('content');const req=tx.objectStore('content').get('site');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close()})}
 async function writeData(data:SiteData){const db=await database();return new Promise<void>((resolve,reject)=>{const tx=db.transaction('content','readwrite');tx.objectStore('content').put(data,'site');tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})}
 function App(){
+ useEffect(()=>{
+  const videos=['/assets/project-2/tvc/film.mp4','/assets/project-3/ad-full.mp4','/assets/project-4/film-study.mp4'].map(src=>{const video=document.createElement('video');video.preload='auto';video.muted=true;video.setAttribute('playsinline','');video.style.cssText='position:absolute;width:1px;height:1px;opacity:0;pointer-events:none';video.setAttribute('aria-hidden','true');video.src=src;document.body.appendChild(video);video.load();return video});
+  return()=>videos.forEach(video=>{video.removeAttribute('src');video.load();video.remove()});
+ },[]);
+
  const [data,setData]=useState<SiteData>({projects:initialProjects,texts:{}});const [ready,setReady]=useState(false);
  useEffect(()=>{
  let active=true;

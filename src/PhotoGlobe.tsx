@@ -101,7 +101,7 @@ export function PhotoGlobe({project,fallbackImages,paused,zoom=1,embedded=false}
  </div>
  <p className="orbit-description">{project.description==='Add your project description here.'?'Drag the globe to explore. Select an image to look closer.':project.description}</p>
  <div className="orbit-signature"><em>Perspectives</em><span>Worth exploring.</span></div>
- <div className="orbit-control"><button className="orbit-speed" type="button" aria-pressed={accelerated} onClick={()=>setAccelerated(v=>!v)}>{accelerated?'恢复慢速':'加速旋转'}</button><span>按住拖动 · 点击放大</span><span className="orbit-control-divider"/><span>按住拖动 / Shift 加速 · 方向键旋转</span></div>
+ {!embedded&&<div className="orbit-control"><button className="orbit-speed" type="button" aria-pressed={accelerated} onClick={()=>setAccelerated(v=>!v)}>{accelerated?'恢复慢速':'加速旋转'}</button><span>按住拖动 · 点击放大</span><span className="orbit-control-divider"/><span>按住拖动 / Shift 加速 · 方向键旋转</span></div>}
  {selection&&<div className="orbit-lightbox" role="dialog" aria-modal="true" aria-label={'照片 '+(selection.index+1)} onClick={close}><img ref={plate} style={{width:selection.width,height:selection.height}} src={photos[selection.index]} alt={'放大的作品照片 '+(selection.index+1)} onClick={e=>e.stopPropagation()}/><button ref={closeButton} className="orbit-close" aria-label="关闭放大照片" onClick={e=>{e.stopPropagation();close()}}>×</button></div>}
  </section>
 }

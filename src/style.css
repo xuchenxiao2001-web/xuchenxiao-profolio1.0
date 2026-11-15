@@ -398,3 +398,12 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 .home-photography .orbit-header {top:28px;}
 .home-photography .orbit-title {top:60px;}
 @media(max-width:640px){.home-photography{min-height:640px}.home-photography .orbit-embedded{min-height:640px}.home-photography .orbit-title{top:60px}}
+
+.studio-home .home-introduction {padding-top:8px;padding-bottom:4px;font-size:16px;line-height:1.65;font-weight:500;}
+.home-photography {min-height:620px;margin-top:-12px;}
+.home-photography .orbit-embedded {height:82dvh;min-height:620px;}
+.home-photography .orbit-stage {inset:8% 0 2%;}
+.home-footer {position:relative;padding:8px 24px 38px;color:#ac4744;font-size:13px;}
+.home-footer a {color:#ac4744;text-decoration-color:#bf7771;}
+.home-footer .contact-popover {top:auto;bottom:calc(100% + 12px);}
+@media(max-width:640px){.studio-home .home-introduction{font-size:14px;padding-bottom:0}.home-photography{min-height:560px;margin-top:0}.home-photography .orbit-embedded{min-height:560px;height:76dvh}.home-footer{padding-bottom:24px}}

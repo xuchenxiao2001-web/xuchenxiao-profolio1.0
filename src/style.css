@@ -426,3 +426,8 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 
 @media(hover:hover){.project-slide{transition:scale .3s ease;transform-origin:center;}.project-slide:hover,.project-slide:focus-visible{scale:1.055;position:relative;z-index:3;}}
 @media(prefers-reduced-motion:reduce){.project-slide{transition:none;}}
+
+@media(hover:hover){.project-slide:hover,.project-slide:focus-visible{scale:1;}}
+.project-hover-preview {position:fixed;z-index:55;pointer-events:none;overflow:hidden;border-radius:0;box-shadow:0 16px 46px #33251d25;animation:project-preview-in .25s cubic-bezier(.22,1,.36,1) both;}
+@keyframes project-preview-in{from{opacity:.8;transform:scale(.84)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.project-hover-preview{animation:none}}

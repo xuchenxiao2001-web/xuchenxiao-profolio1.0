@@ -447,3 +447,17 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 .indexed-study .model-tvc {padding:0 26px 26px;}
 @media(max-width:900px){.study-directory{left:1.5%;width:14.5%;gap:18px}.study-directory a{grid-template-columns:1fr;gap:2px;font-size:10px}.study-heading{padding:18px 18px 22px}.study-section-heading{padding:20px 18px}}
 @media(max-width:640px){.indexed-study{padding-top:58px}.study-directory{position:sticky;top:48px;left:auto;width:auto;margin:0 16px 18px;padding:12px 0;flex-direction:row;gap:14px;overflow-x:auto;background:#faf9f6ed;backdrop-filter:blur(10px)}.directory-label{display:none}.study-directory a{flex:0 0 120px;grid-template-columns:20px 1fr;font-size:10px}.indexed-study > article.study-document{width:calc(100% - 32px)}.indexed-study .model-tvc{padding:0 14px 20px}}
+
+/* Wide introduction above the continuous, inset artwork column. */
+.indexed-study > .study-heading {width:100%;max-width:1152px;margin:0 auto;padding:16px 24px 32px;}
+.indexed-study > article.study-document {padding:0;background:transparent;}
+.indexed-study .study-section {margin:0;padding:0;line-height:0;scroll-margin-top:24px;}
+.indexed-study .study-section > img {display:block;margin:0;border:0;border-radius:0;}
+.study-directory {top:230px;}
+.study-directory a {position:relative;transform-origin:left center;transition:transform .28s cubic-bezier(.22,1,.36,1),color .28s;}
+.study-directory a::after {content:'▸';position:absolute;right:-5px;top:0;opacity:0;transform:translateX(-6px);color:#ac4744;transition:opacity .28s,transform .28s;font-size:13px;}
+.study-directory a:hover,.study-directory a:focus-visible {transform:scale(1.045);}
+.study-directory a:hover::after,.study-directory a:focus-visible::after {opacity:1;transform:translateX(0);}
+.model-study .study-directory a::after {color:#687764;}
+@media(max-width:640px){.indexed-study > .study-heading{padding:14px 20px 24px}.study-directory{top:48px}.study-directory a::after{right:0}.indexed-study > .study-heading{order:0}}
+@media(prefers-reduced-motion:reduce){.study-directory a,.study-directory a::after{transition:none;transform:none}}

@@ -431,3 +431,19 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 .project-hover-preview {position:fixed;z-index:55;pointer-events:none;overflow:hidden;border-radius:0;box-shadow:0 16px 46px #33251d25;animation:project-preview-in .25s cubic-bezier(.22,1,.36,1) both;}
 @keyframes project-preview-in{from{opacity:.8;transform:scale(.84)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.project-hover-preview{animation:none}}
+
+/* Continuous project document with equal editorial side margins. */
+.indexed-study {padding:64px 0 64px;}
+.indexed-study > article.study-document {width:65%;max-width:none;margin:0 auto;padding:0;background:#ffffff45;}
+.study-heading {padding:22px 26px 28px;}
+.study-directory {position:fixed;top:104px;left:2%;width:13.5%;z-index:30;display:flex;flex-direction:column;gap:22px;}
+.directory-label {font-size:9px;letter-spacing:.12em;color:#9a8c84;margin-bottom:8px;}
+.study-directory a {display:grid;grid-template-columns:23px 1fr;gap:7px;font-size:11px;line-height:1.65;color:#9b918b;text-decoration:none;transition:color .2s;}
+.study-directory a[aria-current],.study-directory a:hover {color:#ac4744;}
+.model-study .study-directory a[aria-current],.model-study .study-directory a:hover {color:#687764;}
+.indexed-study .study-section {scroll-margin-top:24px;animation:none;margin:0;padding:0;}
+.study-section-heading {display:flex;gap:14px;align-items:baseline;padding:24px 26px;font-size:14px;font-weight:400;line-height:1.6;color:#80716a;}
+.study-section-heading span {font-size:10px;letter-spacing:.1em;color:#ac4744;}
+.indexed-study .model-tvc {padding:0 26px 26px;}
+@media(max-width:900px){.study-directory{left:1.5%;width:14.5%;gap:18px}.study-directory a{grid-template-columns:1fr;gap:2px;font-size:10px}.study-heading{padding:18px 18px 22px}.study-section-heading{padding:20px 18px}}
+@media(max-width:640px){.indexed-study{padding-top:58px}.study-directory{position:sticky;top:48px;left:auto;width:auto;margin:0 16px 18px;padding:12px 0;flex-direction:row;gap:14px;overflow-x:auto;background:#faf9f6ed;backdrop-filter:blur(10px)}.directory-label{display:none}.study-directory a{flex:0 0 120px;grid-template-columns:20px 1fr;font-size:10px}.indexed-study > article.study-document{width:calc(100% - 32px)}.indexed-study .model-tvc{padding:0 14px 20px}}

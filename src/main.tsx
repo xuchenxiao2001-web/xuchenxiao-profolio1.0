@@ -109,7 +109,7 @@ function App(){
  let active=true;
  async function load(){
   if(import.meta.env.PROD){
-   try{const response=await fetch(import.meta.env.BASE_URL+'content.json');if(!response.ok)throw Error('Published content missing');const published=await response.json();if(active){setData(published);setReady(true)}}catch(error){console.error(error);if(active)document.getElementById('root')!.textContent='作品内容加载失败，请刷新页面重试。'}
+   try{const inline=document.getElementById('published-content');const response=inline?null:await fetch(import.meta.env.BASE_URL+'content.json');if(response&&!response.ok)throw Error('Published content missing');const published=JSON.parse(document.getElementById('published-content')?.textContent||'null')||await response!.json();if(active){setData(published);setReady(true)}}catch(error){console.error(error);if(active)document.getElementById('root')!.textContent='作品内容加载失败，请刷新页面重试。'}
    return;
   }
   let loaded:SiteData={projects:initialProjects,texts:{}};

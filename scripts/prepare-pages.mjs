@@ -13,7 +13,9 @@ await writeFile('dist/content.json',JSON.stringify(await assets(snapshot)));
 for(const name of await readdir('dist/assets'))if(/\.(js|css)$/.test(name)){
  const path='dist/assets/'+name;const text=await readFile(path,'utf8');await writeFile(path,text.replace(/(["'`])\/(assets|portfolios|projects)\//g,'$1'+base+'$2/'));
 }
-const html=await readFile('dist/index.html','utf8');
+const content=JSON.stringify(await assets(snapshot)).replace(/</g,'\\u003c');
+const html=(await readFile('dist/index.html','utf8')).replace('</head>', '<script id="published-content" type="application/json">'+content+'</script></head>');
+await writeFile('dist/index.html',html);
 for(let i=1;i<=6;i++){const dir='dist/projects/project-'+i;await mkdir(dir,{recursive:true});await writeFile(dir+'/index.html',html);}
 await writeFile('dist/.nojekyll','');
 console.log('Prepared six read-only project pages and saved content.');

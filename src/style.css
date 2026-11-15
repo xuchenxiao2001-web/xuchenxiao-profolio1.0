@@ -411,3 +411,10 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 /* Move the project strip and its introduction together; preserve later layout positions. */
 .studio-home > #projects,.studio-home > .home-introduction {position:relative;top:-100px;}
 @media(max-width:640px){.studio-home > #projects,.studio-home > .home-introduction{top:-48px;}}
+
+/* Center and lower only the hero copy without moving the project strip. */
+.studio-home > section:first-of-type {position:relative;top:64px;text-align:center;}
+.studio-home > section:first-of-type .artistic-title {margin-left:auto;margin-right:auto;text-align:center;}
+.studio-home > section:first-of-type .art-title-line-1 {padding-left:0;}
+.studio-home > section:first-of-type > p {margin-left:auto;margin-right:auto;text-align:center;}
+@media(max-width:640px){.studio-home > section:first-of-type {top:40px;}}

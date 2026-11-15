@@ -407,3 +407,7 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 .home-footer a {color:#ac4744;text-decoration-color:#bf7771;}
 .home-footer .contact-popover {top:auto;bottom:calc(100% + 12px);}
 @media(max-width:640px){.studio-home .home-introduction{font-size:14px;padding-bottom:0}.home-photography{min-height:560px;margin-top:0}.home-photography .orbit-embedded{min-height:560px;height:76dvh}.home-footer{padding-bottom:24px}}
+
+/* Move the project strip and its introduction together; preserve later layout positions. */
+.studio-home > #projects,.studio-home > .home-introduction {position:relative;top:-100px;}
+@media(max-width:640px){.studio-home > #projects,.studio-home > .home-introduction{top:-48px;}}

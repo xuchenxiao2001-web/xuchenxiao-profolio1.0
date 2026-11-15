@@ -1,6 +1,6 @@
 import {readFile,writeFile,mkdir,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-const base='/xuchenxiao-profolio1.0/';
+const base='/';
 const snapshot=JSON.parse(await readFile('publication/content.json','utf8'));
 async function assets(value){
  if(Array.isArray(value))return Promise.all(value.map(assets));

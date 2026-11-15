@@ -473,3 +473,5 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 .indexed-study .tvc-separated-section {padding-top:64px;scroll-margin-top:24px;}
 .tvc-section-title {margin:0 0 28px;color:#687764;font-family:'Nunito Sans','Geist',sans-serif;font-size:clamp(22px,2.4vw,32px);font-weight:500;line-height:1.4;letter-spacing:.02em;text-align:center;}
 @media(max-width:640px){.indexed-study .tvc-separated-section{padding-top:40px}.tvc-section-title{margin-bottom:20px}}
+
+.video-status{display:block;font-size:12px;color:#777;line-height:1.6;pointer-events:none}.video-retry{font-size:12px;padding:8px 14px;color:#ac4744;text-decoration:underline}.film-study-player .video-status,.film-study-player .video-retry{position:absolute;bottom:48px;left:12px;z-index:3;background:#fff9}.film-study-badge{pointer-events:none}

@@ -95,7 +95,12 @@ function ImageMarquee({projects}:{projects:Project[]}){
  {projects.slice(0,6).map((project,i)=><div key={project.id} className="project-caption-slot"><a href={'/projects/'+project.id} className="project-caption-link"><span className="project-caption-number">{String(i+1).padStart(2,'0')}:</span><span>{project.title}</span></a></div>)}
  </div></div></div>
 }
-function Home({projects}:{projects:Project[]}){return <main className="studio-home min-h-screen bg-white overflow-hidden"><StudioSketches/><Navbar/><section className="pt-24 sm:pt-28 pb-1 text-center px-4 sm:px-6"><ArtisticTitle/><p className="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-neutral-900 max-w-xl mx-auto leading-relaxed">{<Copy value={homeContent.subtitle}/>}</p></section><ImageMarquee projects={projects}/><section className="text-center px-4 sm:px-6 pt-2 pb-12 sm:pb-16 max-w-2xl mx-auto"><p className="text-base sm:text-lg md:text-xl text-neutral-900 leading-relaxed">{<Copy value={homeContent.description}/>}</p><div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8"><ContactButton variant="text" align="center"/><a href="#" className="text-neutral-900 font-semibold underline underline-offset-4 decoration-neutral-400 hover:decoration-neutral-900 transition-colors"><Copy value="See Projects"/></a></div></section></main>}
+function HomePhotography({project,projects}:{project:Project|undefined;projects:Project[]}){
+ const ref=useRef<HTMLDivElement>(null);const [visible,setVisible]=useState(false);
+ useEffect(()=>{const el=ref.current;if(!el)return;const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){setVisible(true);observer.disconnect()}},{rootMargin:'350px'});observer.observe(el);return()=>observer.disconnect()},[]);
+ return <div ref={ref} id="photography" className="home-photography">{project&&visible&&<PhotoGlobe project={project} fallbackImages={projects.map(p=>p.image)} paused={false} embedded/>}</div>;
+}
+function Home({projects}:{projects:Project[]}){return <main className="studio-home min-h-screen bg-white overflow-hidden"><StudioSketches/><Navbar/><section className="pt-24 sm:pt-28 pb-1 text-center px-4 sm:px-6"><ArtisticTitle/><p className="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-neutral-900 max-w-xl mx-auto leading-relaxed">{<Copy value={homeContent.subtitle}/>}</p></section><ImageMarquee projects={projects.filter(p=>p.id!=='project-6')}/><section className="text-center px-4 sm:px-6 pt-2 pb-12 sm:pb-16 max-w-2xl mx-auto"><p className="text-base sm:text-lg md:text-xl text-neutral-900 leading-relaxed">{<Copy value={homeContent.description}/>}</p><div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8"><ContactButton variant="text" align="center"/><a href="#" className="text-neutral-900 font-semibold underline underline-offset-4 decoration-neutral-400 hover:decoration-neutral-900 transition-colors"><Copy value="See Projects"/></a></div></section><HomePhotography project={projects.find(p=>p.id==='project-6')} projects={projects}/></main>}
 
 
 
@@ -184,7 +189,8 @@ function App(){
  }
  load();return()=>{active=false};
  },[]);
- const project=data.projects.find(p=>'/projects/'+p.id===location.pathname.replace(/\/$/,''));
+ if(location.pathname.replace(/\/$/,'').endsWith('/projects/project-6'))location.replace(import.meta.env.BASE_URL+'#photography');
+ const project=data.projects.find(p=>p.id!=='project-6'&&'/projects/'+p.id===location.pathname.replace(/\/$/,''));
  const [detailZoom,setDetailZoom]=useState(1);
  useEffect(()=>{
   if(!project)return;

@@ -391,3 +391,10 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 .model-tvc-copy p {font-size:15px;color:#666d62;line-height:1.9;margin-top:12px;max-width:850px;white-space:pre-wrap;}
 @media(max-width:640px){.model-study .ip-tabs{gap:10px;grid-template-columns:repeat(4,minmax(0,1fr))}.model-study .ip-tabs button{flex-direction:column;font-size:11px}.model-tvc{gap:20px}}
 .model-tvc .tvc-storyboard-title {font-size:17px;font-weight:500;color:#687764;margin:10px 0 -16px;letter-spacing:.04em;}
+
+.home-photography {min-height:760px;position:relative;}
+.home-photography .orbit-embedded {background:transparent;height:95dvh;min-height:700px;}
+.home-photography .orbit-title h1 {font:400 clamp(28px,3vw,44px)/1.2 'Nunito Sans',sans-serif;letter-spacing:-.03em;max-width:none;font-style:normal;margin:8px 0;}
+.home-photography .orbit-header {top:28px;}
+.home-photography .orbit-title {top:60px;}
+@media(max-width:640px){.home-photography{min-height:640px}.home-photography .orbit-embedded{min-height:640px}.home-photography .orbit-title{top:60px}}

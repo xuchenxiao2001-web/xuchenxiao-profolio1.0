@@ -8,7 +8,7 @@ function previewSource(src:string){
  return src;
 }
 type Selection={index:number;rect:DOMRect;width:number;height:number};
-export function PhotoGlobe({project,fallbackImages,paused,zoom=1}:{project:Project;fallbackImages:string[];paused:boolean;zoom?:number}){
+export function PhotoGlobe({project,fallbackImages,paused,zoom=1,embedded=false}:{project:Project;fallbackImages:string[];paused:boolean;zoom?:number;embedded?:boolean}){
  const photos=(project.sphereImages?.filter(Boolean).length?project.sphereImages:project.gallery.filter(Boolean).length?project.gallery:fallbackImages)!.filter(Boolean);
  const tiles=useMemo(()=>[-60,-30,0,30,60].flatMap((latitude,row)=>{
   const count=[6,10,12,10,6][row];return Array.from({length:count},(_,i)=>({latitude,longitude:i*360/count+(row%2&&latitude!==-30?15:0)}));
@@ -76,9 +76,9 @@ export function PhotoGlobe({project,fallbackImages,paused,zoom=1}:{project:Proje
  function close(){if(!selection)return;const img=plate.current;if(!img){setSelection(null);return}const target=selection.rect,box=img.getBoundingClientRect();const animation=img.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translate('+(target.x+target.width/2-box.x-box.width/2)+'px,'+(target.y+target.height/2-box.y-box.height/2)+'px) scale('+Math.max(.04,target.width/box.width)+')'}],{duration:600,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});animation.onfinish=()=>{setSelection(null);previousFocus.current?.focus()}}
  useLayoutEffect(()=>{if(!selection||!plate.current)return;const img=plate.current,b=img.getBoundingClientRect(),r=selection.rect;img.animate([{opacity:.65,transform:'translate('+(r.x+r.width/2-b.x-b.width/2)+'px,'+(r.y+r.height/2-b.y-b.height/2)+'px) scale('+Math.max(.04,r.width/b.width)+')'},{opacity:1,transform:'none'}],{duration:850,easing:'cubic-bezier(.22,1,.36,1)'});closeButton.current?.focus()},[selection]);
  useEffect(()=>{if(!selection)return;const key=(e:KeyboardEvent)=>{if(e.key==='Escape')close();if(e.key==='Tab'){e.preventDefault();closeButton.current?.focus()}};document.addEventListener('keydown',key);return()=>document.removeEventListener('keydown',key)},[selection]);
- return <main className={'photo-orbit '+(selection?'photo-selected':'')}>
+ return <section className={'photo-orbit '+(embedded?'orbit-embedded ':'')+(selection?'photo-selected':'')}>
  <header className="orbit-header"><span className="orbit-label">IMAGE ATLAS</span><span className="orbit-count">{selection?String(selection.index+1).padStart(2,'0'):'00'} / {String(photos.length).padStart(2,'0')}</span></header>
- <div className="orbit-title"><div className="project-eyebrow">Project06</div><span>Orbit</span><h1>{project.title}</h1><p><i/> A world of images</p></div>
+ <div className="orbit-title">{!embedded&&<div className="project-eyebrow">Project06</div>}<span>Orbit</span><h1>{project.title}</h1><p><i/> A world of images</p></div>
  <p className="orbit-topnote">Different perspectives.<br/>One connected world.</p>
  <div ref={stage} className="orbit-stage" role="region" aria-label="照片球体，按住鼠标拖动旋转，Shift 加速，方向键支持360度旋转，点击照片按原始比例放大" tabIndex={0}
  onKeyDown={e=>{if(selection||paused)return;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();motion.current.targetYaw+=e.key==='ArrowLeft'?-24:e.key==='ArrowRight'?24:0;motion.current.targetPitch+=e.key==='ArrowUp'?-18:e.key==='ArrowDown'?18:0}}}
@@ -103,5 +103,5 @@ export function PhotoGlobe({project,fallbackImages,paused,zoom=1}:{project:Proje
  <div className="orbit-signature"><em>Perspectives</em><span>Worth exploring.</span></div>
  <div className="orbit-control"><button className="orbit-speed" type="button" aria-pressed={accelerated} onClick={()=>setAccelerated(v=>!v)}>{accelerated?'恢复慢速':'加速旋转'}</button><span>按住拖动 · 点击放大</span><span className="orbit-control-divider"/><span>按住拖动 / Shift 加速 · 方向键旋转</span></div>
  {selection&&<div className="orbit-lightbox" role="dialog" aria-modal="true" aria-label={'照片 '+(selection.index+1)} onClick={close}><img ref={plate} style={{width:selection.width,height:selection.height}} src={photos[selection.index]} alt={'放大的作品照片 '+(selection.index+1)} onClick={e=>e.stopPropagation()}/><button ref={closeButton} className="orbit-close" aria-label="关闭放大照片" onClick={e=>{e.stopPropagation();close()}}>×</button></div>}
- </main>
+ </section>
 }

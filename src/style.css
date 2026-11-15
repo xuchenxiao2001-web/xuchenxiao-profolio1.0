@@ -423,3 +423,6 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 .studio-home::before {display:none;}
 .studio-home > section:first-of-type {left:-18px;}
 @media(max-width:640px){.studio-home > section:first-of-type{left:-8px;}}
+
+@media(hover:hover){.project-slide{transition:scale .3s ease;transform-origin:center;}.project-slide:hover,.project-slide:focus-visible{scale:1.055;position:relative;z-index:3;}}
+@media(prefers-reduced-motion:reduce){.project-slide{transition:none;}}

@@ -1,3 +1,4 @@
+import imageManifest from './imageManifest.json';
 import globeThumbnails from './globeThumbnails.json';
 import {useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import type {Project} from './content';
@@ -7,6 +8,8 @@ function previewSource(src:string){
  if(src.startsWith('https://images.higgs.ai/')){const url=new URL(src);url.searchParams.set('w','480');url.searchParams.set('q','65');return url.href}
  return src;
 }
+function displaySource(src:string){const key=src.replace(import.meta.env.BASE_URL,'/');const item=(imageManifest as Record<string,{src:string}>)[src]||(imageManifest as Record<string,{src:string}>)[key];return item?(item.src.startsWith(import.meta.env.BASE_URL)?item.src:import.meta.env.BASE_URL+item.src.slice(1)):src;}
+function warmPhoto(src:string){const image=new Image();image.decoding='async';image.src=displaySource(src);}
 type Selection={index:number;rect:DOMRect;width:number;height:number};
 export function PhotoGlobe({project,fallbackImages,paused,zoom=1,embedded=false}:{project:Project;fallbackImages:string[];paused:boolean;zoom?:number;embedded?:boolean}){
  const photos=(project.sphereImages?.filter(Boolean).length?project.sphereImages:project.gallery.filter(Boolean).length?project.gallery:fallbackImages)!.filter(Boolean);
@@ -97,11 +100,11 @@ export function PhotoGlobe({project,fallbackImages,paused,zoom=1,embedded=false}
  onPointerLeave={stopHover}
  onPointerUp={e=>{const m=motion.current;if(!m.down)return;m.down=false;if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);if(!m.moved&&m.index>=0&&m.rect)open(m.index,m.rect)}}
  onPointerCancel={()=>{motion.current.down=false}}>
- <div className="orbit-zoom" style={{visibility:radius>0?'visible':'hidden',transform:'scale('+(zoom*(selection?1.08:1))+')'}}><div ref={world} className="orbit-world">{tiles.map((tile,i)=><button type="button" key={i} data-photo={photoOrder[i]} aria-label={'放大照片 '+(photoOrder[i]+1)} className="orbit-tile" style={{width:radius*.5,height:radius*.37,marginLeft:-radius*.25,marginTop:-radius*.185,transform:'rotateY('+tile.longitude+'deg) rotateX('+(-tile.latitude)+'deg) translateZ('+radius+'px)'}} onClick={e=>{if(!selection&&!paused&&(e.detail===0||!motion.current.moved))open(photoOrder[i],e.currentTarget.getBoundingClientRect())}}><img src={previewSource(photos[photoOrder[i]])} decoding="async" fetchPriority={Math.cos(tile.longitude*Math.PI/180)>.5?'high':'low'} alt={'作品照片 '+(photoOrder[i]+1)} draggable={false}/></button>)}</div></div>
+ <div className="orbit-zoom" style={{visibility:radius>0?'visible':'hidden',transform:'scale('+(zoom*(selection?1.08:1))+')'}}><div ref={world} className="orbit-world">{tiles.map((tile,i)=><button type="button" key={i} data-photo={photoOrder[i]} aria-label={'放大照片 '+(photoOrder[i]+1)} className="orbit-tile" onMouseEnter={()=>warmPhoto(photos[photoOrder[i]])} onFocus={()=>warmPhoto(photos[photoOrder[i]])} style={{width:radius*.5,height:radius*.37,marginLeft:-radius*.25,marginTop:-radius*.185,transform:'rotateY('+tile.longitude+'deg) rotateX('+(-tile.latitude)+'deg) translateZ('+radius+'px)'}} onClick={e=>{if(!selection&&!paused&&(e.detail===0||!motion.current.moved))open(photoOrder[i],e.currentTarget.getBoundingClientRect())}}><img src={previewSource(photos[photoOrder[i]])} decoding="async" fetchPriority={Math.cos(tile.longitude*Math.PI/180)>.5?'high':'low'} alt={'作品照片 '+(photoOrder[i]+1)} draggable={false}/></button>)}</div></div>
  </div>
  <p className="orbit-description">{project.description==='Add your project description here.'?'Drag the globe to explore. Select an image to look closer.':project.description}</p>
  <div className="orbit-signature"><em>Perspectives</em><span>Worth exploring.</span></div>
  {!embedded&&<div className="orbit-control"><button className="orbit-speed" type="button" aria-pressed={accelerated} onClick={()=>setAccelerated(v=>!v)}>{accelerated?'恢复慢速':'加速旋转'}</button><span>按住拖动 · 点击放大</span><span className="orbit-control-divider"/><span>按住拖动 / Shift 加速 · 方向键旋转</span></div>}
- {selection&&<div className="orbit-lightbox" role="dialog" aria-modal="true" aria-label={'照片 '+(selection.index+1)} onClick={close}><img ref={plate} style={{width:selection.width,height:selection.height}} src={photos[selection.index]} alt={'放大的作品照片 '+(selection.index+1)} onClick={e=>e.stopPropagation()}/><button ref={closeButton} className="orbit-close" aria-label="关闭放大照片" onClick={e=>{e.stopPropagation();close()}}>×</button></div>}
+ {selection&&<div className="orbit-lightbox" role="dialog" aria-modal="true" aria-label={'照片 '+(selection.index+1)} onClick={close}><img ref={plate} decoding="async" fetchPriority="high" style={{width:selection.width,height:selection.height,backgroundImage:'url('+previewSource(photos[selection.index])+')',backgroundSize:'contain',backgroundPosition:'center',backgroundRepeat:'no-repeat'}} src={displaySource(photos[selection.index])} alt={'放大的作品照片 '+(selection.index+1)} onClick={e=>e.stopPropagation()}/><button ref={closeButton} className="orbit-close" aria-label="关闭放大照片" onClick={e=>{e.stopPropagation();close()}}>×</button></div>}
  </section>
 }

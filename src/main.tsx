@@ -44,7 +44,7 @@ function CoverImage({project}:{project:Project}){
  return <img decoding="async" src={project.image} onError={e=>{if(project.fallback&&e.currentTarget.src!==project.fallback)e.currentTarget.src=project.fallback}} style={{objectPosition:crop.x+'% '+crop.y+'%',transformOrigin:crop.x+'% '+crop.y+'%',transform:'scale('+crop.zoom+')'}} className="w-full h-full object-cover pointer-events-none block" draggable={false} alt={project.title}/>;
 }
 function ImageMarquee({projects}:{projects:Project[]}){
- const captions=useRef<HTMLDivElement>(null);const captionActive=useRef(false);
+ const captions=useRef<HTMLDivElement>(null);const captionActive=useRef(false);const imageActive=useRef(false);
  const track=useRef<HTMLDivElement>(null);const physics=useRef({offset:0,velocity:0,drag:false,startX:0,startOffset:0,lastX:0,lastTime:0,moved:false});const [dragging,setDragging]=useState(false);
  useEffect(()=>{
  let frame:number,lastTime=0;
@@ -57,7 +57,7 @@ function ImageMarquee({projects}:{projects:Project[]}){
   const el=track.current,s=physics.current;
   if(el&&el.firstElementChild){
    const cycle=pitch*el.children.length;
-   if(!s.drag&&!captionActive.current){
+   if(!s.drag&&!captionActive.current&&!imageActive.current){
     if(Math.abs(s.velocity)>.1){s.offset+=s.velocity*delta;s.velocity*=Math.pow(.95,delta)}
     else{s.velocity=0;s.offset-=.8*delta}
     s.offset=((s.offset%cycle)+cycle)%cycle-cycle;
@@ -88,7 +88,7 @@ function ImageMarquee({projects}:{projects:Project[]}){
  },[]);
  return <div className="project-gallery-group"><section className="curved-gallery relative overflow-hidden"><div className="pointer-events-none absolute top-0 left-0 right-0 gallery-mask z-10"><svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-full"><path fill="white" d="M0 0H1440V50C1440 50 1200 100 720 100C240 100 0 50 0 50V0Z"/></svg></div>
  <div ref={track} className={'flex w-max gap-[9px] select-none '+(dragging?'cursor-grabbing':'cursor-grab')} style={{willChange:'transform',touchAction:'pan-y'}} onPointerDown={e=>{const s=physics.current;s.drag=true;s.moved=false;s.velocity=0;s.startX=s.lastX=e.clientX;s.startOffset=s.offset;s.lastTime=performance.now();(e.target as HTMLElement).closest('a')?.setPointerCapture(e.pointerId);setDragging(true)}} onPointerMove={e=>{const s=physics.current;if(!s.drag)return;const now=performance.now();s.velocity=((e.clientX-s.lastX)/Math.max(1,now-s.lastTime))*16;if(Math.abs(e.clientX-s.startX)>5)s.moved=true;s.offset=s.startOffset+e.clientX-s.startX;s.lastX=e.clientX;s.lastTime=now}} onPointerUp={e=>{physics.current.drag=false;setDragging(false);(e.target as HTMLElement).closest('a')?.releasePointerCapture(e.pointerId)}} onPointerCancel={()=>{physics.current.drag=false;setDragging(false)}}>
- {projects.slice(0,6).map((project,i)=><a href={'/projects/'+project.id} aria-label={project.title} key={i} onDragStart={e=>e.preventDefault()} onClick={e=>{if(physics.current.moved)e.preventDefault()}} className="project-slide flex-shrink-0 overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"><CoverImage project={project}/></a>)}</div>
+ {projects.slice(0,6).map((project,i)=><a href={'/projects/'+project.id} aria-label={project.title} key={i} onMouseEnter={()=>{imageActive.current=true;physics.current.velocity=0}} onMouseLeave={()=>{imageActive.current=false}} onFocus={()=>{imageActive.current=true}} onBlur={()=>{imageActive.current=false}} onDragStart={e=>e.preventDefault()} onClick={e=>{if(physics.current.moved)e.preventDefault()}} className="project-slide flex-shrink-0 overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"><CoverImage project={project}/></a>)}</div>
  <div className="pointer-events-none absolute bottom-0 left-0 right-0 gallery-mask gallery-mask-bottom z-10"><svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-full"><path fill="white" d="M0 100H1440V50C1440 50 1200 0 720 0C240 0 0 50 0 50V100Z"/></svg></div></section>
  <div className="project-captions" onMouseEnter={()=>{captionActive.current=true}} onMouseLeave={()=>{captionActive.current=false}} onFocus={()=>{captionActive.current=true}} onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node))captionActive.current=false}}>
  <div ref={captions} className="project-caption-layer">

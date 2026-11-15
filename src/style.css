@@ -465,3 +465,7 @@ nav .contact-anchor > button {font-size:12px;font-weight:700;}
 /* Balance the project strip between the two text blocks, without moving the copy. */
 .studio-home > #projects {top:-25px;}
 @media(max-width:640px){.studio-home > #projects{top:0;}}
+
+/* Fine adjustment: keep header anchored to the document top. */
+.studio-home > #projects {top:-45px;}
+@media(max-width:640px){.studio-home > #projects{top:-12px;}}

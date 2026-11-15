@@ -14,8 +14,12 @@ for(const name of await readdir('dist/assets'))if(/\.(js|css)$/.test(name)){
  const path='dist/assets/'+name;const text=await readFile(path,'utf8');await writeFile(path,text.replace(/(["'`])\/(assets|portfolios|projects)\//g,'$1'+base+'$2/'));
 }
 const content=JSON.stringify(await assets(snapshot)).replace(/</g,'\\u003c');
-const html=(await readFile('dist/index.html','utf8')).replace('</head>', '<script id="published-content" type="application/json">'+content+'</script></head>');
-await writeFile('dist/index.html',html);
-for(let i=1;i<=6;i++){const dir='dist/projects/project-'+i;await mkdir(dir,{recursive:true});await writeFile(dir+'/index.html',html);}
+let html=(await readFile('dist/index.html','utf8')).replace('</head>', '<script id="published-content" type="application/json">'+content+'</script></head>');
+const manifest=JSON.parse(await readFile('src/imageManifest.json','utf8'));
+const resolveImage=src=>manifest[src]?.src||src;
+const preload=src=>src?'<link rel="preload" as="image" href="'+resolveImage(src)+'" fetchpriority="high">':'';
+const homepage=html.replace('</head>',snapshot.projects.slice(0,5).map(p=>preload(p.image)).join('')+'</head>');
+await writeFile('dist/index.html',homepage);
+for(let i=1;i<=6;i++){const dir='dist/projects/project-'+i;await mkdir(dir,{recursive:true});const project=snapshot.projects[i-1];const first=i===4?'/assets/project-4/film-study-layout.png':i===5?null:project.detailImage;await writeFile(dir+'/index.html',html.replace('</head>',preload(first)+'</head>'));}
 await writeFile('dist/.nojekyll','');
 console.log('Prepared six read-only project pages and saved content.');

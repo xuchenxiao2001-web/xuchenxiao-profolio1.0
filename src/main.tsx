@@ -94,7 +94,7 @@ function ImageMarquee({projects}:{projects:Project[]}){
  <div className="project-captions" onMouseEnter={()=>{captionActive.current=true}} onMouseLeave={()=>{captionActive.current=false}} onFocus={()=>{captionActive.current=true}} onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node))captionActive.current=false}}>
  <div ref={captions} className="project-caption-layer">
  {projects.slice(0,6).map((project,i)=><div key={project.id} className="project-caption-slot"><a href={'/projects/'+project.id} className="project-caption-link"><span className="project-caption-number">{String(i+1).padStart(2,'0')}:</span><span>{project.title}</span></a></div>)}
- </div></div>{hoverCover&&createPortal(<div className="project-hover-preview" style={{left:hoverCover.rect.left-hoverCover.rect.width*.1,top:hoverCover.rect.top+hoverCover.rect.height/2-hoverCover.rect.width*1.2*5/8/2,width:hoverCover.rect.width*1.2,height:hoverCover.rect.width*1.2*5/8}}><CoverImage project={hoverCover.project}/></div>,document.body)}</div>
+ </div></div>{hoverCover&&createPortal(<div className="project-hover-preview" style={{left:hoverCover.rect.left-hoverCover.rect.width*.1,top:hoverCover.rect.top+hoverCover.rect.height/2-hoverCover.rect.width*1.2*5/8/2,width:hoverCover.rect.width*1.2,height:hoverCover.rect.width*1.2*5/8}}><CoverImage project={hoverCover.project.id==='project-3'?{...hoverCover.project,coverCrop:{x:50,y:50,zoom:1}}:hoverCover.project}/></div>,document.body)}</div>
 }
 function HomePhotography({project,projects}:{project:Project|undefined;projects:Project[]}){
  const ref=useRef<HTMLDivElement>(null);const [visible,setVisible]=useState(false);
